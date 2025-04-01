@@ -1,0 +1,13 @@
+diff a/slock.1 b/slock.1	(rejected hunks)
+@@ -16,6 +18,11 @@ is executed after the screen has been locked.
+ .Bl -tag -width Ds
+ .It Fl v
+ Print version information to stdout and exit.
++.It Fl f
++List all valid X fonts and exit.
++.It Fl m Ar message
++Overrides default slock lock message.
++.TP
+ .El
+ .Sh SECURITY CONSIDERATIONS
+ To make sure a locked screen can not be bypassed by switching VTs

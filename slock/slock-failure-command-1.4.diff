@@ -1,0 +1,39 @@
+diff --git a/config.def.h b/config.def.h
+index 9855e21..4c7b0d9 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -10,3 +10,10 @@ static const char *colorname[NUMCOLS] = {
+ 
+ /* treat a cleared input like a wrong password (color) */
+ static const int failonclear = 1;
++
++/* number of failed password attempts until failcommand is executed.
++   Set to 0 to disable */
++static const int failcount = 0;
++
++/* command to be executed after [failcount] failed password attempts */
++static const char *failcommand = "shutdown";
+diff --git a/slock.c b/slock.c
+index d2f0886..53c567f 100644
+--- a/slock.c
++++ b/slock.c
+@@ -23,6 +23,7 @@
+ #include "util.h"
+ 
+ char *argv0;
++int failtrack = 0;
+ 
+ enum {
+ 	INIT,
+@@ -167,6 +168,11 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
+ 				if (running) {
+ 					XBell(dpy, 100);
+ 					failure = 1;
++					failtrack++;
++
++					if (failtrack >= failcount && failcount != 0){
++						system(failcommand);
++					}
+ 				}
+ 				explicit_bzero(&passwd, sizeof(passwd));
+ 				len = 0;

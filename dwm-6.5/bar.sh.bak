@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# export DISPLAY=:2
+export DISPLAY=$(echo $DISPLAY)
+
+while true; do
+    # Ambil interface Wi-Fi yang aktif
+    # wifi_iface=$(iw dev | awk '$1=="Interface"{print $2}')
+    
+    # Cek SSID menggunakan nmcli (fallback kalau iwgetid gagal)
+    wifi_ssid=$(nmcli -t -f ACTIVE,SSID dev wifi | awk -F: '$1=="yes" {print $2}')
+    
+    if [ -z "$wifi_ssid" ]; then
+        wifi=" [NET:$wifi_iface|Disconnected]"
+    else
+        wifi=" [NET:$wifi_iface|$wifi_ssid]"
+    fi
+
+    # Ambil status baterai
+    battery="[BAT:$(cat /sys/class/power_supply/BAT1/capacity)%]"
+
+    # Ambil penggunaan RAM
+    ram_used=$(free -m | awk '/^Mem/ {print $3}')
+    ram_total=$(free -m | awk '/^Mem/ {print $2}')
+    ram="[RAM:${ram_used}/${ram_total}MB]"
+
+    # Ambil penggunaan CPU
+    cpu_usage=$(top -bn1 | awk '/^%Cpu/ {print $2 + $4}')
+    cpu="[CPU:${cpu_usage}%]"
+
+    # Ambil tanggal & waktu
+    datetime="[DATE:$(date "+%d-%m-%Y %H:%M")]"
+
+    # Gabungkan ke status bar
+    xsetroot -name "$wifi $battery $ram $datetime"
+
+    sleep 2  # Update tiap 2 detik
+done
+
