@@ -1,6 +1,6 @@
 #!/bin/sh
 while true; do
-    # Jika idle lebih dari 9 menit (540000 ms) dan slock belum berjalan, kunci layar
+    # if there's no activity for 9 minutes, lock the screen. if not, sleep
     if [ "$(xssstate -i)" -ge 540000 ] && ! pgrep slock > /dev/null; then
         slock
     fi
