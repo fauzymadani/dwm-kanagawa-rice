@@ -11,3 +11,7 @@ my dwm build with kanagawa dragon theme at https://www.reddit.com/r/unixporn/com
 THIS REPO IS FOR THE DWM CONFIG ONLY, 
 for neovim, refer to: https://github.com/fauzymadani/kickstart.nvim
 other: https://github.com/fauzymadani/dotfiles (not regularly maintained!)
+
+=========================================================
+[ANN]
+- i have changed the bar to the default dwm bar because of the Goal.
