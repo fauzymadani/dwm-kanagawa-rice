@@ -14,4 +14,4 @@ other: https://github.com/fauzymadani/dotfiles (not regularly maintained!)
 
 =========================================================
 [ANN]
-- i have changed the bar to the default dwm bar because of the Goal.
+- i have changed the bar to the default dwm bar because of the Goal. (Using `xsetroot`)
