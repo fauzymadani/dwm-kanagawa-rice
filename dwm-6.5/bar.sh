@@ -1,44 +1,43 @@
 #!/bin/sh
 
-# Pastikan DISPLAY terdeteksi
+# Look for the display
 export DISPLAY=$(echo $DISPLAY)
 
-# Ikon Nerd Font
 wifi_icon=""  # WiFi
-battery_icon="󰁹"  # Baterai
+battery_icon="󰁹"  # Battery
 ram_icon="󰍛"  # RAM
 cpu_icon="󰻠"  # CPU
-clock_icon="󰥔"  # Jam
+clock_icon="󰥔"  # Clock
 
 while true; do
-    # Cek apakah X server masih berjalan tanpa mengubah status bar
+    # check for the X server
     if ! xdpyinfo >/dev/null 2>&1; then
         echo " "
         exit 1
     fi
 
-    # Ambil SSID Wi-Fi
+    # get wifi SSID
     wifi_ssid=$(nmcli -t -f ACTIVE,SSID dev wifi | awk -F: '$1=="yes" {print $2}')
     wifi_status="${wifi_icon} ${wifi_ssid:-Disconnected}"
 
-    # Ambil status baterai
+    # batteru status
     battery="${battery_icon} $(cat /sys/class/power_supply/BAT1/capacity)%"
 
-    # Ambil penggunaan RAM
+    # RAM usage
     ram_used=$(free -m | awk '/^Mem/ {print $3}')
     ram_total=$(free -m | awk '/^Mem/ {print $2}')
     ram="${ram_icon} ${ram_used}/${ram_total}MB"
 
-    # Ambil penggunaan CPU
+    # CPU
     cpu_usage=$(top -bn1 | awk '/^%Cpu/ {print $2 + $4}')
     cpu="${cpu_icon} ${cpu_usage}%"
 
-    # Ambil tanggal & waktu
+    # Date
     datetime="${clock_icon} $(date "+%d-%m-%Y %H:%M")"
 
-    # Gabungkan ke status bar pakai /
+    
     xsetroot -name " [ $wifi_status / $battery / $ram / $datetime ]"
 
-    sleep 2  # Update tiap 2 detik
+    sleep 2  # Update every 2 second
 done
 
